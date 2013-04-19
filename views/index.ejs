@@ -1,17 +1,42 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-    <script src='/javascripts/jquery.min.js'></script>
-	<script src='/javascripts/mastermind.js'></script>
-  </head>
-  <body>
-    <p>Welcome to <%= title %></p>
-	<div id="game">
-		<button id="game" type="button" >Zacznij Grę</button>
-		<span id="response"></span>
-		
-	</div>
-  </body>
+	<head>
+		<title><%= title %></title>
+		<link rel='stylesheet' href='/stylesheets/style.css' />
+		<script src='/javascripts/jquery.min.js'></script>
+		<script src='/javascripts/mastermind.js'></script>
+	</head>
+	<body>
+		<div id="header"><span>Witam w grze <%= title %></span></div>
+		<div id="game">
+			
+		</div>
+		<div id="btnPlace">
+			<table id="setting">
+				<tr>
+					<td>Rozmiar Planszy</td>
+					<td>
+						<select id="setSize">
+							<% for(var i = 5; i < 25; i++) {%> <option> <%= i %> </option> <% } %>
+						</select>
+					</td>
+					<td>Ilość Elementów</td>
+					<td>
+						<select id="setDim">
+							<% for(var i = 9; i < 30; i++) {%> <option> <%= i %> </option> <% } %>
+						</select>
+					</td>
+					
+					<td>Ilość Prób</td>
+					<td>
+						<select id="setMax">
+							<option>0</option>
+							<% for(var i = 1; i < 20; i++) {%> <option> <%= i %> </option> <% } %>
+						</select>
+					</td>
+				</tr>
+			</table>
+			<button id="play" type="button" >Start</button>
+		</div>
+	</body>
 </html>

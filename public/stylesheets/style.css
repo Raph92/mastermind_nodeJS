@@ -1,8 +1,62 @@
 body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+	padding-top: 20px;
+	padding-bottom: 20px;
+	font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
 a {
   color: #00B7FF;
+}
+
+#header {
+	padding-top: 15px;
+	text-align: center;
+	background-color: #C5D4E9;
+	margin-left: 200px;
+	margin-right: 200px;
+	height: 40px;
+	font-size: 1.2em;
+}
+#game {
+	background-color: #6491FB;
+	margin-left: 200px;
+	margin-right: 200px;
+	text-align: center;
+	height: 500px;
+	max-height: 500px;
+	overflow-y: auto;
+	border: 2px solid gray;
+}
+#game table {
+	margin-left: auto;
+	margin-right: auto;
+	font-size: 1.5em;
+}
+#btnPlace{
+	background-color: #649154;
+	margin-left: 200px;
+	margin-right: 200px;
+	text-align: center;
+	padding-bottom: 10px;
+}
+
+#btnPlace button {
+	background-color: #FFFF4C;
+	border: 0px;
+}
+
+#btnPlace select {
+	margin-left: 5px;
+	margin-right: 20px;
+}
+
+#btnPlace table{
+	margin-left: auto;
+	margin-right: auto;
+	font-weight: bold;
+}
+
+
+#play {
+	
 }
