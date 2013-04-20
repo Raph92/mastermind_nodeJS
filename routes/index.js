@@ -53,7 +53,10 @@ exports.mark = function (req, res) {
     var markAnswer = function () {
         var move = req.params[0].split('/');
         move = move.slice(0, move.length - 1);
-		console.log(req.session.puzzle.data);
+		// console.log(req.session.puzzle.data);
+		
+		
+		
         return {
             'retVal': 'tutaj – zamiast tego napisu – ocena',
             'retMsg': 'coś o ocenie – np „Brawo” albo „Buuu”'

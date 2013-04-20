@@ -18,7 +18,7 @@ mand.rowWriter = function(size) {
 };
 
 $(document).ready(function() {
-	mand.start = $('#start').click(function () { //Zapisywanie ustawień		
+	mand.start = $('#start').click(function () { 		
 		mand.gameSettings = mand.gameSettings( $('#setSize').val(), $('#setDim').val(), $('#setMax').val() );	
 		
 		var playGet = '/play/size/' + mand.gameSettings.getSize() + '/dim/' +
@@ -29,24 +29,44 @@ $(document).ready(function() {
 				$('#game').prepend(val);
 			});			 
 		});			
-		mand.rowWriter(mand.gameSettings.getSize());					
+		$(this).attr('disabled', 'disable'); 
+		$('select').attr('disabled', 'disable');
+		mand.rowWriter(mand.gameSettings.getSize());	//Rysujemy pierwszy wiersz na odpowiedzi					
 	});	
 
 	mand.mark = $('#mark').click(function() {
-		var markGet = '/mark/';
-		
-		$('.inputsNow').each(function(index){
-			markGet += $(this).val() + '/';
-		});
-		
-		$.getJSON(markGet, function(data) { 
-			$.each(data, function(key, val) { 
-				$('.pointsNow').append(val);
-			});			
-		});
+		//Sprawdzenie poprawności udzielonych odpowiedzi	
+		var isCorrect = true;			
+		$('.inputsNow').each(function(index) {			
+			if( isCorrect === true ) {
+				isCorrect = /^\d+$/.test( $(this).val() );	
+				if ( parseInt( $(this).val() ) > mand.gameSettings.getDim() ) isCorrect = false; //Ujemne nie przejda w regex
+			}			
+		});		
+		//Dane poprawne, wysyłamy requesta
+		if( isCorrect ) {
+			var markGet = '/mark/';
+			
+			$('.inputsNow').each(function(index){
+				markGet += $(this).val() + '/';
+			});
+			
+			$.getJSON(markGet, function(data) { 
+				$.each(data, function(key, val) { 
+					$('.pointsNow').append(val);
+				});			
+			});
 
-		$('.inputsNow').attr('disabled', 'disabled').attr('class', 'inputsHist');
+			$('.inputsNow').attr('disabled', 'disabled').attr('class', 'inputsHist');
 
+			
+
+
+
+			
+		} else {
+			alert("Proszę poprawić dane w polach odpowiedzi, są błędne!");
+		}
 		
 	});
 

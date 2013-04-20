@@ -26,13 +26,13 @@ a {
 	max-height: 500px;
 	overflow-y: auto;
 	border: 2px solid gray;
+	font-size: 1.3em;
 }
 #game table {
 	margin-left: auto;
 	margin-right: auto;
-	font-size: 1.5em;
 }
-#btnPlace{
+#manage{
 	background-color: #649154;
 	margin-left: 200px;
 	margin-right: 200px;
@@ -40,22 +40,45 @@ a {
 	padding-bottom: 10px;
 }
 
-#btnPlace button {
+#manage #start {
 	background-color: #FFFF4C;
 	border: 0px;
+	font-weight: bold;
 }
 
-#btnPlace select {
+#manage #mark {
+	background-color: #FF4C4C;
+	border: 0px;
+	font-weight: bold;
+}
+
+#manage select {
 	margin-left: 5px;
 	margin-right: 20px;
 }
 
-#btnPlace table{
+#manage table {
 	margin-left: auto;
 	margin-right: auto;
 	font-weight: bold;
 }
 
+.inputsNow {
+	width: 25px;
+}
+ 
+.inputsHist {
+	width: 25px;
+	background-color: #FF9326;
+}
+
+.pointsNow {
+
+}
+
+.pointsHistory {
+
+}
 
 #play {
 	
