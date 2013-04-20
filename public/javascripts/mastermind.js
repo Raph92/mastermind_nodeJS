@@ -21,7 +21,7 @@ mand.nextMove = function(pointsTab) {
 	for( i = 0; i < pointsTab[0]; i += 1) print += ' ● ';
 	for( i = 0; i < pointsTab[1]; i += 1) print += ' ○ ';
 	if ( pointsTab[0] !== mand.gameSettings.getSize() ) {
-		$('.pointsNow').append(print);
+		$('.pointsNow').append(print).hide().fadeIn(1000);
 		
 		$('.inputsNow').attr('disabled', 'disabled').attr('class', 'inputsHist');
 		$('.pointsNow').attr('class', 'pointsHistory');
