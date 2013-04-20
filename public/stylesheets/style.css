@@ -2,6 +2,7 @@ body {
 	padding-top: 20px;
 	padding-bottom: 20px;
 	font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+	background-color: #000000;
 }
 
 a {
@@ -12,15 +13,15 @@ a {
 	padding-top: 15px;
 	text-align: center;
 	background-color: #C5D4E9;
-	margin-left: 200px;
-	margin-right: 200px;
+	margin-left: 350px;
+	margin-right: 350px;
 	height: 40px;
 	font-size: 1.2em;
 }
 #game {
 	background-color: #6491FB;
-	margin-left: 200px;
-	margin-right: 200px;
+	margin-left: 350px;
+	margin-right: 350px;
 	text-align: center;
 	height: 500px;
 	max-height: 500px;
@@ -34,8 +35,8 @@ a {
 }
 #manage{
 	background-color: #649154;
-	margin-left: 200px;
-	margin-right: 200px;
+	margin-left: 350px;
+	margin-right: 350px;
 	text-align: center;
 	padding-bottom: 10px;
 }
@@ -65,11 +66,13 @@ a {
 
 .inputsNow {
 	width: 25px;
+	text-align: center;
 }
  
 .inputsHist {
 	width: 25px;
-	background-color: #FF9326;
+	background-color: #BBBBBB;
+	text-align: center;
 }
 
 .pointsNow {

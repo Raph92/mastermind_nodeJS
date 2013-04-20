@@ -12,9 +12,11 @@ exports.play = function (req, res) {
             data.push(Math.floor(Math.random() * puzzle.dim));
         }
 			req.session.puzzle.data = data;
-			
+		
+		//TEST
+		console.log("Pula wygrywająca: " + data);
         return {
-            'retMsg': 'Zaczynamy'
+            'retMsg': 'Mastermind'
         };
     };
     // poniższa linijka jest zbędna (przy założeniu, że
@@ -36,31 +38,54 @@ exports.play = function (req, res) {
     res.end(JSON.stringify(newGame()));
 };
 
-//Wyniki tylko po stronie serwera!!!
-// var correctNumber = function(){
-	// tab = [];
-	// return{
-		// setTab: function(rand){
-			// tab = rand;
-		// },
-		// getTab: function(){
-			// return tab;
-		// }
-	// }
-// }();
+/*	Wyniki tylko po stronie serwera!!!
+var correctNumber = function(){
+	tab = [];
+	return{
+		setTab: function(rand){
+			tab = rand;
+		},
+		getTab: function(){
+			return tab;
+		}
+	}
+}();
+*/
 
 exports.mark = function (req, res) {
     var markAnswer = function () {
+		var winTab = req.session.puzzle.data;
         var move = req.params[0].split('/');
-        move = move.slice(0, move.length - 1);
-		// console.log(req.session.puzzle.data);
+        move = move.slice(0, move.length - 1);	
+		var points = { 'black' : 0,	'white' : 0	};
+		var founds = [];
 		
-		
-		
-        return {
-            'retVal': 'tutaj – zamiast tego napisu – ocena',
-            'retMsg': 'coś o ocenie – np „Brawo” albo „Buuu”'
-        };
+		var inTab = function( tab, item ) {
+			var found = false;
+			for(var i = 0; i < tab.length; i += 1) {
+				if ( parseInt(tab[i]) === item ) found = true;
+			};
+			return found;
+		};
+			
+		for ( var i = 0; i < move.length; i += 1 ) {
+			for( var j = 0; j < winTab.length; j += 1 ) {
+				if ( winTab[j] === parseInt(move[i]) ) {
+					if( j === i) {
+						points.black += 1;
+					} else {
+						if ( winTab[j] !== parseInt(move[j]) ) {
+							if ( inTab(founds, parseInt(move[i])) === false ) {
+								points.white += 1;
+								founds.push(parseInt(move[i]));
+							}
+						}
+					}
+				}
+			}		
+		};
+			
+        return points;
     };
 	res.writeHead(200, {
 		'Content-Type': 'application/json; charset=utf8'});
