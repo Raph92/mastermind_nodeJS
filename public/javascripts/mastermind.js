@@ -1,83 +1,133 @@
+"use strict";
 var mand = {};
 
-mand.gameSettings = function(size, dim, max) {
+mand.gameSettings = function (size, dim, max) {
 	return {
-		getSize: function() { return parseInt(size); },
-		getDim: function() { return parseInt(dim); },
-		getMax: function() { return parseInt(max); }
+		getSize: function () { return parseInt(size, 10); },
+		getDim: function () { return parseInt(dim, 10); },
+		getMax: function () { return parseInt(max, 10); },
+	};
+};
+
+mand.popup = function (text, height, width, delay, id) {						 
+	if ($('body').find('#myPopup').html() !== undefined) {
+		$('#myPopup').remove();	
+	};				
+	$('body').append('<div id="myPopup" style="display : none; ">' + text + '<button type="button">X</button></div>');		
+	
+	$('#myPopup').css({
+		'background-color': '#555555',
+		'border': '3px solid #20202F',
+		'padding-top' : '5px',
+		'padding-left' : '5px',
+		'padding-bottom' : '5px',
+		'padding-right' : '30px',
+		'position':'absolute',
+		'top':  '20%',		
+		'left': '25%',
+		'height': height + 'px',
+		'width': width + 'px',
+		'box-shadow' : '5px 5px 10px 5px #000000'
+	});		
+	$('#myPopup button').css({ 
+		'position':'absolute',
+		'border-radius' : '20px',
+		'right': '5px',
+		'top': '5px',
+		'width' : '25px',
+		'height' : '25px'
+	}).click(function () {
+		$('#myPopup').remove();			
+	});		
+	$('#myPopup').fadeIn(delay);
+
+	$('.popupDIV').click(function () {		
+		var hex = '#' + mand.rgbToHex($(this).css('background-color'));
+		$('#' + id).css('background-color', hex);
+	});
+};
+
+mand.rgbToHex = function (rgb) {
+	rgb = rgb.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
+	function toHex(x) {
+		return ('0' + parseInt(x).toString(16)).slice(-2);
 	}
+	return toHex(rgb[1]) + toHex(rgb[2]) + toHex(rgb[3]);
 };
 
-mand.rowWriter = function(size) {
-	var sRow = '<tr>';
-	for(var i = 0; i < size; i += 1) {
-		sRow += '<td><input type="text" class="inputsNow"/></td>'
-	} sRow += '<td class="pointsNow"></td></tr>';	
+mand.rowWriter = function (size) {
+	var i, sRow = '<tr>';
+	var colorDIVs = '';			 
+	var color = ['#000000', '#C0C0C0', '#808080', '#FFFFFF',
+				 '#800000', '#FF0000', '#800080', '#FF00FF',
+				 '#008000', '#00FF00', '#808000', '#FFFF00',
+				 '#000080', '#0000FF', '#008080', '#00FFFF'];
+				 
+	
+	
+	for (i = 0; i < size; i += 1) {
+		sRow += '<td><div id="answer' + i + '" class="inputs" style="box-shadow: 2px 2px #000000"></div></td>';	}
+	sRow += '<td class="pointsNow"></td></tr>';
 	$('#results').append(sRow);
+	
+	for (i = 0; i < color.length; i +=1) {
+		colorDIVs += '<div class="popupDIV" style="background-color:' + color[i] + '; box-shadow: 2px 2px #000000"></div>';
+	};
+	
+	$('.inputs').click(function () {
+		mand.popup(colorDIVs, 120, 140, 100, $(this).attr('id'));
+	});
 };
 
-mand.nextMove = function(pointsTab) {
+mand.nextMove = function (pointsTab) {
 	var i, print = '';
-	for( i = 0; i < pointsTab[0]; i += 1) print += ' ● ';
-	for( i = 0; i < pointsTab[1]; i += 1) print += ' ○ ';
-	if ( pointsTab[0] !== mand.gameSettings.getSize() ) {
+	for (i = 0; i < pointsTab[0]; i += 1) { print += ' ● '; }
+	for (i = 0; i < pointsTab[1]; i += 1) { print += ' ○ '; }
+	if (pointsTab[0] !== mand.gameSettings.getSize()) {
 		$('.pointsNow').append(print).hide().fadeIn(1000);
-		
-		$('.inputsNow').attr('disabled', 'disabled').attr('class', 'inputsHist');
+		$('.inputs').off('click');
+		$('.inputs').attr('id', '').attr('class', 'inputsHist');
 		$('.pointsNow').attr('class', 'pointsHistory');
 		mand.rowWriter(mand.gameSettings.getSize());
 	} else {
-		alert('WYGRAŁEŚ!');
+		mand.popup('<h1>WYGRAŁEŚ!</h1>', 70, 170, 500);
 		$('#mark').attr('disabled', 'disabled');
 	}
 };
 
-$(document).ready(function() {
-	mand.start = $('#start').click(function () { 		
+$(document).ready(function () {
+	mand.start = $('#start').click(function () {
 		mand.gameSettings = mand.gameSettings( $('#setSize').val(), $('#setDim').val(), $('#setMax').val() );	
-		
 		var playGet = '/play/size/' + mand.gameSettings.getSize() + '/dim/' +
 		mand.gameSettings.getDim() + '/max/' + mand.gameSettings.getMax() + '/';			
-		 
+		console.log(playGet); 
+		
 		$.getJSON(playGet, function(data) { 
 			$.each(data, function(key, val) { 
 				$('#game').prepend(val);
 			});			 
 		});			
+		$(this).attr("autocomplete", "off");			//Bug firefoxa z blokowaniem buttona
+		$('select').attr("autocomplete", "off");
 		$(this).attr('disabled', 'disable'); 
 		$('select').attr('disabled', 'disable');
 		mand.rowWriter(mand.gameSettings.getSize());	//Rysujemy pierwszy wiersz na odpowiedzi					
 	});	
-
+	
 	mand.mark = $('#mark').click(function() {
-		//Sprawdzenie poprawności udzielonych odpowiedzi	
-		var isCorrect = true;			
-					
-		$('.inputsNow').each(function(index) {			
-			if( isCorrect === true ) {
-				isCorrect = /^\d+$/.test( $(this).val() );	
-				if ( parseInt( $(this).val() ) > mand.gameSettings.getDim() ) isCorrect = false; //Ujemne nie przejda w regex
-			}			
-		});	
+		var markGet = '/mark/';
+						
+		$('.inputs').each(function () {
+			markGet += (mand.rgbToHex($(this).css('background-color'))) + '/';
+		});
 		
-		//Dane poprawne, wysyłamy requesta
-		if( isCorrect ) {
-			var markGet = '/mark/';			
-			$('.inputsNow').each(function(index){
-				markGet += $(this).val() + '/';
-			});
-			
-			$.getJSON(markGet, function(data) { 
-				var points = [];	
-				$.each(data, function(key, val) { 
-					points.push(val);					
-				});	
-				mand.nextMove(points); //Funkcja obrazująca wyniki w postaci kropek			
-			});
-			
-		} else {
-			alert("Proszę poprawić dane w polach odpowiedzi, są błędne!");
-		}
+		$.getJSON(markGet, function(data) { 
+			var points = [];	
+			$.each(data, function(key, val) { 
+				points.push(val);					
+			});	
+			mand.nextMove(points); //Funkcja obrazująca wyniki w postaci kropek			
+		});	
 	});
 });
 

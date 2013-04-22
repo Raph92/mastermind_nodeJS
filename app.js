@@ -31,7 +31,7 @@ app.configure('development', function () {
 
 app.get('/', routes.index);
 app.get(/^\/play\/((size\/(\d+)\/)?(dim\/(\d+)\/)?(max\/(\d+)\/)?)?/, routes.play);
-app.get(/^\/mark\/((?:\d+\/)+)$/, routes.mark);
+app.get(/^\/mark\/((?:[0-9a-f]+\/)+)$/, routes.mark);
 
 http.createServer(app).listen(app.get('port'), function () {
     console.log("Serwer nasłuchuje na porcie " + app.get('port'));

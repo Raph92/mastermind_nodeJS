@@ -64,16 +64,28 @@ a {
 	font-weight: bold;
 }
 
-.inputsNow {
+.popupDIV {
+	width: 27px;
+	height: 27px;
+	background-color: white;
+	float: left;
+	margin: 2px;
+}
+
+.inputs {
 	width: 25px;
-	text-align: center;
+	height: 25px;
+	background-color: white;
+	float: left;
+}
+
+.inputsHist{
+	width: 25px;
+	height: 25px;
+	background-color: white;
+	float: left;
 }
  
-.inputsHist {
-	width: 25px;
-	background-color: #BBBBBB;
-	text-align: center;
-}
 
 .pointsNow {
 

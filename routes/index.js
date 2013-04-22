@@ -7,13 +7,19 @@ exports.index = function (req, res) {
 
 exports.play = function (req, res) {
     var newGame = function () {
-        var i, data = [], puzzle = req.session.puzzle;
+        var color = ['000000', 'c0c0c0', '808080', 'ffffff',
+					 '800000', 'ff0000', '800080', 'ff00ff',
+					 '008000', '00ff00', '808000', 'ffff00',
+					 '000080', '0000ff', '008080', '00ffff'];		
+
+		
+		var i, data = [], puzzle = req.session.puzzle;
         for (i = 0; i < puzzle.size; i += 1) {
-            data.push(Math.floor(Math.random() * puzzle.dim));
+            data.push(color[Math.floor(Math.random() * puzzle.dim)]);
         }
 			req.session.puzzle.data = data;
 		
-		//TEST
+		
 		console.log("Pula wygrywająca: " + data);
         return {
             'retMsg': 'Mastermind'
@@ -38,20 +44,6 @@ exports.play = function (req, res) {
     res.end(JSON.stringify(newGame()));
 };
 
-/*	Wyniki tylko po stronie serwera!!!
-var correctNumber = function(){
-	tab = [];
-	return{
-		setTab: function(rand){
-			tab = rand;
-		},
-		getTab: function(){
-			return tab;
-		}
-	}
-}();
-*/
-
 exports.mark = function (req, res) {
     var markAnswer = function () {
 		var winTab = req.session.puzzle.data;
@@ -63,21 +55,21 @@ exports.mark = function (req, res) {
 		var inTab = function( tab, item ) {
 			var found = false;
 			for(var i = 0; i < tab.length; i += 1) {
-				if ( parseInt(tab[i]) === item ) found = true;
+				if ( tab[i] === item ) found = true;
 			};
 			return found;
 		};
 			
 		for ( var i = 0; i < move.length; i += 1 ) {
 			for( var j = 0; j < winTab.length; j += 1 ) {
-				if ( winTab[j] === parseInt(move[i]) ) {
+				if ( winTab[j] === move[i] ) {
 					if( j === i) {
 						points.black += 1;
 					} else {
-						if ( winTab[j] !== parseInt(move[j]) ) {
-							if ( inTab(founds, parseInt(move[i])) === false ) {
+						if ( winTab[j] !== move[j] ) {
+							if ( inTab(founds, move[i]) === false ) {
 								points.white += 1;
-								founds.push(parseInt(move[i]));
+								founds.push(move[i]);
 							}
 						}
 					}
