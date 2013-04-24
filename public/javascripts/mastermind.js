@@ -6,6 +6,17 @@ mand.gameSettings = function (size, dim, max) {
 		getSize: function () { return parseInt(size, 10); },
 		getDim: function () { return parseInt(dim, 10); },
 		getMax: function () { return parseInt(max, 10); },
+		nextMove: function() {
+			var i = 0;
+			return {	
+				inc: function() {
+					i += 1;
+				},
+				get: function() {
+					return i;
+				}
+			}
+		}()
 	};
 };
 
@@ -66,12 +77,12 @@ mand.rowWriter = function (size) {
 	
 	
 	for (i = 0; i < size; i += 1) {
-		sRow += '<td><div id="answer' + i + '" class="inputs" style="box-shadow: 2px 2px #000000"></div></td>';	}
+		sRow += '<td><div id="answer' + i + '" class="inputs" style="box-shadow: 2px 2px #131304; border-radius: 20px;"></div></td>';	}
 	sRow += '<td class="pointsNow"></td></tr>';
 	$('#results').append(sRow);
 	
 	for (i = 0; i < color.length; i +=1) {
-		colorDIVs += '<div class="popupDIV" style="background-color:' + color[i] + '; box-shadow: 2px 2px #000000"></div>';
+		colorDIVs += '<div class="popupDIV" style="background-color:' + color[i] + '; box-shadow: 2px 2px #131304; border-radius: 20px;"></div>';
 	};
 	
 	$('.inputs').click(function () {
@@ -83,12 +94,18 @@ mand.nextMove = function (pointsTab) {
 	var i, print = '';
 	for (i = 0; i < pointsTab[0]; i += 1) { print += ' ● '; }
 	for (i = 0; i < pointsTab[1]; i += 1) { print += ' ○ '; }
+	
 	if (pointsTab[0] !== mand.gameSettings.getSize()) {
 		$('.pointsNow').append(print).hide().fadeIn(1000);
 		$('.inputs').off('click');
 		$('.inputs').attr('id', '').attr('class', 'inputsHist');
 		$('.pointsNow').attr('class', 'pointsHistory');
-		mand.rowWriter(mand.gameSettings.getSize());
+		if ( mand.gameSettings.nextMove.get() === mand.gameSettings.getDim() && mand.gameSettings.getDim() !== 0 ) {
+			mand.popup('<h1>PRZEGRAŁEŚ!</h1>', 70, 200, 500);
+			$('#mark').attr('disabled', 'disabled');
+		} else {
+			mand.rowWriter(mand.gameSettings.getSize());
+		};
 	} else {
 		mand.popup('<h1>WYGRAŁEŚ!</h1>', 70, 170, 500);
 		$('#mark').attr('disabled', 'disabled');
@@ -97,10 +114,10 @@ mand.nextMove = function (pointsTab) {
 
 $(document).ready(function () {
 	mand.start = $('#start').click(function () {
-		mand.gameSettings = mand.gameSettings( $('#setSize').val(), $('#setDim').val(), $('#setMax').val() );	
+		mand.gameSettings = mand.gameSettings( $('#setSize').val(), $('#setMax').val(), $('#setDim').val() );	
+				
 		var playGet = '/play/size/' + mand.gameSettings.getSize() + '/dim/' +
 		mand.gameSettings.getDim() + '/max/' + mand.gameSettings.getMax() + '/';			
-		console.log(playGet); 
 		
 		$.getJSON(playGet, function(data) { 
 			$.each(data, function(key, val) { 
@@ -115,6 +132,13 @@ $(document).ready(function () {
 	});	
 	
 	mand.mark = $('#mark').click(function() {
+		$(this).attr("autocomplete", "off");
+		mand.gameSettings.nextMove.inc();
+
+		console.log(mand.gameSettings.nextMove.get());
+		console.log(mand.gameSettings.getDim());
+		
+		
 		var markGet = '/mark/';
 						
 		$('.inputs').each(function () {
